@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+ 	  xmlns:h="http://java.sun.com/jsf/html"
+ 	   xmlns:f="http://java.sun.com/jsf/core">
+
+<head>
+	<title>Olá JSF</title>
+</head>
+
+<h:body>
+
+	<h:form id="form">
+		<h:panelGrid columns="2">
+			<f:facet name="header">
+				<h:outputText value="Cadastro JSF"/>
+			</f:facet>
+			<h:outputLabel value="ID" for="campoId"/>
+			<h:inputText  id="campoId" value="#{pessoaBean.pessoa.id}" readonly="true"/>
+			<h:outputLabel value="Nome:" for="campoNome"/>
+			<h:inputText id="campoNome" value="#{pessoaBean.pessoa.nome}"/>
+			<h:outputLabel value="Sobrenome:" for="campoSobrenome"/>
+			<h:inputText id="campoSobrenome" value="#{pessoaBean.pessoa.sobrenome}"/>
+			<h:outputLabel value="Idade:" for="campoIdade"/>
+			<h:inputText id="campoIdade" value="#{pessoaBean.pessoa.idade}"/>
+			<h:outputLabel/>
+			<h:panelGroup>
+				<h:commandButton value="Novo" action="#{pessoaBean.novo}"/>
+					<h:commandButton value="Salvar" action="#{pessoaBean.salvar}"/>
+					<h:commandButton value="Remover" action="#{pessoaBean.delete}"/>			
+				</h:panelGroup>
+		</h:panelGrid>
+		
+		<h:dataTable value="#{pessoaBean.pessoas}" var="p" >
+			<h:column>
+				<h:outputText value="#{p.id}"/>
+			</h:column>
+			
+			<h:column>
+				<h:outputText value="#{p.nome}"/>
+			</h:column>
+			
+			<h:column>
+				<h:outputText value="#{p.sobrenome}"/>
+			</h:column>
+			
+			<h:column>
+				<h:outputText value="#{p.idade}"/>
+			</h:column>
+			
+			<h:column>
+				<h:outputText value="#{p.dataNascimento}"/>
+			</h:column>
+			
+			<h:column>
+				<h:commandLink value="Editar">
+					<f:setPropertyActionListener value="#{p}" target="#{pessoaBean.pessoa}"/>
+				</h:commandLink>
+			</h:column>
+			
+			<h:column>
+				<h:commandLink value="Excluir" action="#{pessoaBean.delete}">
+					<f:setPropertyActionListener value="#{p}" target="#{pessoaBean.pessoa}"/>
+				</h:commandLink>
+			</h:column>
+			
+		</h:dataTable>
+		
+	</h:form>
+
+</h:body>
+
+</html>
