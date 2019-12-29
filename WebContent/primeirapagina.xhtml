@@ -11,6 +11,7 @@
 <h:body>
 
 	<h:form id="form">
+		<h:graphicImage height="48" width="48" library="img" name="jsf.jpeg"/>
 		<h:panelGrid columns="2">
 			<f:facet name="header">
 				<h:outputText value="Cadastro JSF"/>
@@ -23,7 +24,12 @@
 			<h:inputText id="campoSobrenome" value="#{pessoaBean.pessoa.sobrenome}"/>
 			<h:outputLabel value="Idade:" for="campoIdade"/>
 			<h:inputText id="campoIdade" value="#{pessoaBean.pessoa.idade}"/>
-			<h:outputLabel/>
+			<h:outputLabel value="Sexo"/>
+			<h:selectOneMenu id="campoSexo" value="#{pessoaBean.pessoa.sexo}" required="true">
+				<f:selectItem itemValue="Indefinido" itemLabel="--Selecione--" noSelectionOption="true"/>				
+				<f:selectItem itemValue="M" itemLabel="Masculino"/>
+				<f:selectItem itemValue="F" itemLabel="Feminino"/>
+			</h:selectOneMenu>
 			<h:panelGroup>
 				<h:commandButton value="Novo" action="#{pessoaBean.novo}"/>
 					<h:commandButton value="Salvar" action="#{pessoaBean.salvar}"/>
@@ -31,34 +37,47 @@
 				</h:panelGroup>
 		</h:panelGrid>
 		
-		<h:dataTable value="#{pessoaBean.pessoas}" var="p" >
+		<h:dataTable value="#{pessoaBean.pessoas}" var="p" border="3" cellpadding="6" >
+			<f:facet name="header">
+				<h:outputText value="Lista de Pessoas Cadastradas"/>
+			</f:facet>
+			
 			<h:column>
+			<f:facet name="header">ID</f:facet>
 				<h:outputText value="#{p.id}"/>
 			</h:column>
 			
 			<h:column>
+				<f:facet name="header">Nome</f:facet>
 				<h:outputText value="#{p.nome}"/>
 			</h:column>
 			
 			<h:column>
+				<f:facet name="header">Sobrenome</f:facet>
 				<h:outputText value="#{p.sobrenome}"/>
 			</h:column>
 			
 			<h:column>
+				<f:facet name="header">Idade</f:facet>
 				<h:outputText value="#{p.idade}"/>
 			</h:column>
 			
 			<h:column>
+				<f:facet name="header">Data Nascimento</f:facet>
 				<h:outputText value="#{p.dataNascimento}"/>
 			</h:column>
 			
 			<h:column>
-				<h:commandLink value="Editar">
-					<f:setPropertyActionListener value="#{p}" target="#{pessoaBean.pessoa}"/>
-				</h:commandLink>
+				<f:facet name="header">Sexo</f:facet>
+				<h:outputText value="#{p.sexo}"/>
 			</h:column>
 			
 			<h:column>
+				<f:facet name="header">Ação</f:facet>
+				<h:commandLink value="Editar">
+					<f:setPropertyActionListener value="#{p}" target="#{pessoaBean.pessoa}"/>
+				</h:commandLink>
+				&nbsp;
 				<h:commandLink value="Excluir" action="#{pessoaBean.delete}">
 					<f:setPropertyActionListener value="#{p}" target="#{pessoaBean.pessoa}"/>
 				</h:commandLink>
