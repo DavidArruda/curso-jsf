@@ -5,35 +5,69 @@
  	   xmlns:f="http://java.sun.com/jsf/core">
 
 <head>
-	<title>Olá JSF</title>
+	<title>Cadastro de usuário</title>
 </head>
 
 <h:body>
-
 	<h:form id="form">
 		<h:graphicImage height="48" width="48" library="img" name="jsf.jpeg"/>
 		<h:panelGrid columns="2">
 			<f:facet name="header">
-				<h:outputText value="Cadastro JSF"/>
+				<h:outputText value="Cadastro de Usuário"/>
 			</f:facet>
 			<h:outputLabel value="ID" for="campoId"/>
 			<h:inputText  id="campoId" value="#{pessoaBean.pessoa.id}" readonly="true"/>
+			
 			<h:outputLabel value="Nome:" for="campoNome"/>
 			<h:inputText id="campoNome" value="#{pessoaBean.pessoa.nome}"/>
+			
 			<h:outputLabel value="Sobrenome:" for="campoSobrenome"/>
 			<h:inputText id="campoSobrenome" value="#{pessoaBean.pessoa.sobrenome}"/>
+			
 			<h:outputLabel value="Idade:" for="campoIdade"/>
 			<h:inputText id="campoIdade" value="#{pessoaBean.pessoa.idade}"/>
+			
 			<h:outputLabel value="Sexo"/>
-			<h:selectOneMenu id="campoSexo" value="#{pessoaBean.pessoa.sexo}" required="true">
+			<h:selectOneMenu id="campoSexo" value="#{pessoaBean.pessoa.sexo}" required="false">
 				<f:selectItem itemValue="Indefinido" itemLabel="--Selecione--" noSelectionOption="true"/>				
 				<f:selectItem itemValue="M" itemLabel="Masculino"/>
 				<f:selectItem itemValue="F" itemLabel="Feminino"/>
 			</h:selectOneMenu>
+			
+			<h:outputLabel value="Frameworkes"/>
+			<h:selectManyMenu id="campoFrameworks" style="height:100px;"
+			 value="#{pessoaBean.pessoa.frameworks}" >
+				<f:selectItem itemValue="Hibernate" />				
+				<f:selectItem itemValue="Spring MVC" />
+				<f:selectItem itemValue="JSF" />
+				<f:selectItem itemValue="PrimeFaces" />
+			</h:selectManyMenu>
+			
+			<h:outputLabel value="Ativo:"/>
+
+			<h:selectBooleanCheckbox value="#{pessoaBean.pessoa.ativo}"/>
+			
+			<h:outputLabel value="Perfil:"/>
+			<h:selectOneMenu required="false">
+				<f:selectItem itemValue="Indefinido" itemLabel="--Selecione--" noSelectionOption="true"/>
+				<f:selectItem itemValue="ADMINISTRADOR" itemLabel="Administrador" value="#{pessoaBean.pessoa.perfilUser}"/>
+				<f:selectItem itemValue="GERENTE" itemLabel="Gerente" value="#{pessoaBean.pessoa.perfilUser}"/>
+				<f:selectItem itemValue="USUÁRIO" itemLabel="Usuário" value="#{pessoaBean.pessoa.perfilUser}"/>
+			</h:selectOneMenu>
+			
+			<h:outputLabel value="Login:" for="campoLogin"/>
+			<h:inputText id="campoLogin" value="#{pessoaBean.pessoa.login}"/>
+			
+			<h:outputLabel value="Senha:" for="campoSenha"/>
+			<h:inputSecret id="campoSenha" value="#{pessoaBean.pessoa.senha}"/>
+			
+			<h:outputLabel/>
+			
 			<h:panelGroup>
-				<h:commandButton value="Novo" action="#{pessoaBean.novo}"/>
-					<h:commandButton value="Salvar" action="#{pessoaBean.salvar}"/>
-					<h:commandButton value="Remover" action="#{pessoaBean.delete}"/>			
+				<h:commandButton value="Novo" action="#{pessoaBean.novo}" image="/resources/img/novoUsuario.png" title="Novo Usuário"/>
+					<h:commandButton value="Salvar" action="#{pessoaBean.salvar}" image="/resources/img/salvar.png"/>
+					<h:commandButton value="Remover" action="#{pessoaBean.delete}"/>	
+					<h:commandButton value="Limpar" type="reset"/>		
 				</h:panelGroup>
 		</h:panelGrid>
 		
@@ -74,12 +108,14 @@
 			
 			<h:column>
 				<f:facet name="header">Ação</f:facet>
-				<h:commandLink value="Editar">
+				<h:commandLink title="Editar">
 					<f:setPropertyActionListener value="#{p}" target="#{pessoaBean.pessoa}"/>
+					<h:graphicImage value="/resources/img/editar.png"/>
 				</h:commandLink>
 				&nbsp;
-				<h:commandLink value="Excluir" action="#{pessoaBean.delete}">
+				<h:commandLink title="Excluir" action="#{pessoaBean.delete}">
 					<f:setPropertyActionListener value="#{p}" target="#{pessoaBean.pessoa}"/>
+					<h:graphicImage value="/resources/img/excluir.png"/>
 				</h:commandLink>
 			</h:column>
 			
@@ -87,6 +123,7 @@
 		
 	</h:form>
 
+<div>Ícones feitos por <a href="https://www.flaticon.com/br/autores/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/br/" title="Flaticon">www.flaticon.com</a></div>
 </h:body>
 
 </html>
