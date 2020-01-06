@@ -6,9 +6,13 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
 import br.com.dao.DaoGeneric;
 import br.com.entidades.Pessoa;
+import br.com.repository.IDaoPessoa;
+import br.com.repository.IDaoPessoaImpl;
 
 @ViewScoped
 @ManagedBean(name = "pessoaBean") // Controla alguma pagina xhtml
@@ -17,6 +21,7 @@ public class PessoaBean {
 	private Pessoa pessoa = new Pessoa();
 	private DaoGeneric<Pessoa> daoGeneric = new DaoGeneric<Pessoa>();
 	private List<Pessoa> pessoas = new ArrayList<Pessoa>();
+	private IDaoPessoa iDaoPessoa = new IDaoPessoaImpl();
 
 	public String salvar() {
 		pessoa = daoGeneric.merge(pessoa);
@@ -39,6 +44,31 @@ public class PessoaBean {
 	@PostConstruct
 	public void listarPessoas() {
 		pessoas = daoGeneric.listEntity(Pessoa.class);
+	}
+	
+	public String logar() {
+		Pessoa pessoaUser = iDaoPessoa.consultarPessoa(pessoa.getLogin(), pessoa.getSenha());
+		
+		if (pessoaUser != null) {
+			
+			//adicionar o usuario na sessao "usuarioLogado"
+			FacesContext facesContext = FacesContext.getCurrentInstance(); // FacesContext contem informações do ambiente de execução 'JSF"
+			ExternalContext externalContext = facesContext.getExternalContext();
+			externalContext.getSessionMap().put("usuarioLogado", pessoaUser);
+			return "primeirapagina.jsf";
+		}
+		
+		return "index.jsf";
+	}
+	
+	public boolean permiteAcesso(String acesso) {
+		
+		FacesContext facesContext = FacesContext.getCurrentInstance(); // FacesContext contem informações do ambiente de execução 'JSF"
+		ExternalContext externalContext = facesContext.getExternalContext();
+		Pessoa pessoaUser = (Pessoa) externalContext.getSessionMap().get("usuarioLogado");
+		
+		return pessoaUser.getPerfilUser().equals(acesso);
+				
 	}
 	
 	public List<Pessoa> getPessoas() {
