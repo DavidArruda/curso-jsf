@@ -9,7 +9,16 @@
 </head>
 
 <h:body>
-	<h:form id="form">
+
+	<h:form>
+
+		<h:commandLink value="Administração" action="lancamento" style="margin-left:1cm"/>	
+		<h:commandLink value="Lançamentos" action="primeirapagina" style="margin-left:1cm" />
+		<h:commandLink value="Trocar Usuário" action="index"  style="margin-left:1cm"/>
+	
+	</h:form>
+
+	<h:form id="form"  rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}">
 		<h:graphicImage height="48" width="48" library="img" name="jsf.jpeg"/>
 		<h:panelGrid columns="2">
 			<f:facet name="header">
@@ -48,11 +57,11 @@
 			<h:selectBooleanCheckbox value="#{pessoaBean.pessoa.ativo}"/>
 			
 			<h:outputLabel value="Perfil:"/>
-			<h:selectOneMenu required="false">
+			<h:selectOneMenu value="#{pessoaBean.pessoa.perfilUser}" required="false">
 				<f:selectItem itemValue="Indefinido" itemLabel="--Selecione--" noSelectionOption="true"/>
-				<f:selectItem itemValue="ADMINISTRADOR" itemLabel="Administrador" value="#{pessoaBean.pessoa.perfilUser}"/>
-				<f:selectItem itemValue="GERENTE" itemLabel="Gerente" value="#{pessoaBean.pessoa.perfilUser}"/>
-				<f:selectItem itemValue="USUÁRIO" itemLabel="Usuário" value="#{pessoaBean.pessoa.perfilUser}"/>
+				<f:selectItem itemValue="ADMINISTRADOR" itemLabel="Administrador" />
+				<f:selectItem itemValue="GERENTE" itemLabel="Gerente" />
+				<f:selectItem itemValue="USUÁRIO" itemLabel="Usuário" />
 			</h:selectOneMenu>
 			
 			<h:outputLabel value="Login:" for="campoLogin"/>
@@ -66,7 +75,7 @@
 			<h:panelGroup>
 				<h:commandButton value="Novo" action="#{pessoaBean.novo}" image="/resources/img/novoUsuario.png" title="Novo Usuário"/>
 					<h:commandButton value="Salvar" action="#{pessoaBean.salvar}" image="/resources/img/salvar.png"/>
-					<h:commandButton value="Remover" action="#{pessoaBean.delete}"/>	
+					<h:commandButton value="Remover" action="#{pessoaBean.delete}" rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}"/>	
 					<h:commandButton value="Limpar" type="reset"/>		
 				</h:panelGroup>
 		</h:panelGrid>
@@ -106,7 +115,7 @@
 				<h:outputText value="#{p.sexo}"/>
 			</h:column>
 			
-			<h:column>
+			<h:column rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}">
 				<f:facet name="header">Ação</f:facet>
 				<h:commandLink title="Editar">
 					<f:setPropertyActionListener value="#{p}" target="#{pessoaBean.pessoa}"/>
