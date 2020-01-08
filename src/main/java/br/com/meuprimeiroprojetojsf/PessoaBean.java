@@ -1,4 +1,4 @@
-package meuprimeiroprojetojsf;
+package br.com.meuprimeiroprojetojsf;
 
 import java.util.ArrayList;
 import java.util.List;
