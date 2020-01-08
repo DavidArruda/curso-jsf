@@ -32,7 +32,7 @@ public class LancamentoBean {
 		
 		lancamento.setUsuario(pessoaUser);
 		
-		daoGeneric.merge(lancamento);
+		lancamento = daoGeneric.merge(lancamento);
 		
 		carregarLancamentos();
 		
@@ -58,7 +58,7 @@ public class LancamentoBean {
 	
 	public String delete() {
 		
-		daoGeneric.delete(lancamento);
+		daoGeneric.deletePorId(lancamento);
 		
 		novo();
 		
