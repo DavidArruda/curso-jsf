@@ -27,6 +27,8 @@ public class Pessoa implements Serializable {
 	
 	private String sexo;
 	
+	private String nivelProgramador;
+	
 	private String[] frameworks;
 	
 	private Boolean ativo;
@@ -37,11 +39,29 @@ public class Pessoa implements Serializable {
 	
 	private String perfilUser;
 	
+	private Integer[] linguagens;
+	
 	@Temporal(TemporalType.DATE)
 	private Date dataNascimento;
 	
 	public Pessoa() {
 
+	}
+	
+	public Integer[] getLinguagens() {
+		return linguagens;
+	}
+	
+	public void setLinguagens(Integer[] linguagens) {
+		this.linguagens = linguagens;
+	}
+	
+	public String getNivelProgramador() {
+		return nivelProgramador;
+	}
+	
+	public void setNivelProgramador(String nivelProgramador) {
+		this.nivelProgramador = nivelProgramador;
 	}
 
 	public Long getId() {
