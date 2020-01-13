@@ -3,11 +3,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
  	  xmlns:h="http://java.sun.com/jsf/html"
  	  xmlns:f="http://java.sun.com/jsf/core"
+ 	 
  	  xmlns:ui = "http://java.sun.com/jsf/facelets">
 
-<head>
+<h:head>
+
 	<title>Cadastro de usuário</title>
-</head>
+	
+</h:head>
+
 
 <h:body>
 	
@@ -26,7 +30,11 @@
 			<h:inputText  id="campoId" value="#{pessoaBean.pessoa.id}" readonly="true"/>
 			
 			<h:outputLabel value="Nome:" for="campoNome"/>
-			<h:inputText id="campoNome" value="#{pessoaBean.pessoa.nome}"/>
+			<h:inputText id="campoNome" value="#{pessoaBean.pessoa.nome}" 
+				required="true" requiredMessage="Informe o nome do usuário"
+				validatorMessage="Campo Nome: Min 10 e Max 50 caracteres">
+				<f:validateLength minimum="10" maximum="50"/>
+			</h:inputText>	
 			
 			<h:outputLabel value="Sobrenome:" for="campoSobrenome"/>
 			<h:inputText id="campoSobrenome" value="#{pessoaBean.pessoa.sobrenome}"/>
@@ -41,6 +49,11 @@
 				<f:selectItem itemValue="F" itemLabel="Feminino"/>
 			</h:selectOneMenu>
 			
+			<h:outputLabel value="Nascimento:" for="campoNascimento"/>
+				<h:inputText id="campoNascimento" value="#{pessoaBean.pessoa.dataNascimento}" converterMessage="Data de nascimento inválida">
+				<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR" timeZone="GMT-03:00"/>
+			</h:inputText>
+			
 			<h:outputLabel value="Frameworkes"/>
 			<h:selectManyMenu id="campoFrameworks" style="height:100px;"
 			 value="#{pessoaBean.pessoa.frameworks}" >
@@ -50,8 +63,38 @@
 				<f:selectItem itemValue="PrimeFaces" />
 			</h:selectManyMenu>
 			
+			
+			<h:outputLabel value="CEP:"/>
+			<h:inputText value="#{pessoaBean.pessoa.cep}">
+				<f:ajax event="blur" execute="@this" listener="#{pessoaBean.pesquisaCep}"
+				render="logradouro complemento bairro localidade uf unidade ibge gia"/> 
+			</h:inputText>
+			
+			<h:outputLabel value="Logradouro:"/>
+			<h:inputText value="#{pessoaBean.pessoa.logradouro}" id="logradouro"/>
+			
+			<h:outputLabel value="Complemento:"/>
+			<h:inputText value="#{pessoaBean.pessoa.complemento}" id="complemento"/>
+			
+			<h:outputLabel value="Bairro:"/>
+			<h:inputText value="#{pessoaBean.pessoa.bairro}" id="bairro"/>
+			
+			<h:outputLabel value="Localidade"/>
+			<h:inputText value="#{pessoaBean.pessoa.localidade}" id="localidade"/>
+			
+			<h:outputLabel value="UF"/>
+			<h:inputText value="#{pessoaBean.pessoa.uf}" id="uf"/>
+			
+			<h:outputLabel value="Unidade"/>
+			<h:inputText value="#{pessoaBean.pessoa.unidade}" id="unidade"/>
+			
+			<h:outputLabel value="IBGE"/>
+			<h:inputText value="#{pessoaBean.pessoa.ibge}" id="ibge"/>
+			
+			<h:outputLabel value="GIA"/>
+			<h:inputText value="#{pessoaBean.pessoa.gia}" id="gia"/>
+			
 			<h:outputLabel value="Ativo:"/>
-
 			<h:selectBooleanCheckbox value="#{pessoaBean.pessoa.ativo}"/>
 			
 			<h:outputLabel value="Perfil:"/>
@@ -90,13 +133,17 @@
 			<h:outputLabel/>
 			
 			<h:panelGroup>
-				<h:commandButton value="Novo" action="#{pessoaBean.novo}" image="/resources/img/novoUsuario.png" title="Novo Usuário"/>
+				<h:commandButton value="Novo" id="botaoNovo" action="#{pessoaBean.novo}" image="/resources/img/novoUsuario.png" title="Novo Usuário" immediate="true">
+					<f:ajax execute="botaoNovo" render="@form"/>
+				</h:commandButton>
 					<h:commandButton value="Salvar" action="#{pessoaBean.salvar}" image="/resources/img/salvar.png"/>
 					<h:commandButton value="Remover" action="#{pessoaBean.delete}" rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}"/>	
-					<h:commandButton value="Limpar" type="reset"/>		
+					<h:commandButton value="Limpar" action="#{pessoaBean.limpar}"/>		
 				</h:panelGroup>
 		</h:panelGrid>
+	</h:form>	
 		
+	<h:form id="formTable">
 		<h:dataTable value="#{pessoaBean.pessoas}" var="p" border="3" cellpadding="6" >
 			<f:facet name="header">
 				<h:outputText value="Lista de Pessoas Cadastradas"/>
@@ -146,10 +193,8 @@
 			</h:column>
 			
 		</h:dataTable>
-		
-	</h:form>
+	</h:form>	
 
-<div>Ícones feitos por <a href="https://www.flaticon.com/br/autores/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/br/" title="Flaticon">www.flaticon.com</a></div>
 </h:body>
 
 </html>
