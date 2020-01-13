@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 public class Pessoa implements Serializable {
@@ -59,13 +60,24 @@ public class Pessoa implements Serializable {
 
 	private String gia;
 
+	@Transient // não fica persistente ou não grava no banco
+	private Estados estados;
+
 	@Temporal(TemporalType.DATE)
 	private Date dataNascimento = new Date();
 
 	public Pessoa() {
 
 	}
-
+	
+	public Estados getEstados() {
+		return estados;
+	}
+	
+	public void setEstados(Estados estados) {
+		this.estados = estados;
+	}
+	
 	public String getLogradouro() {
 		return logradouro;
 	}
@@ -101,7 +113,7 @@ public class Pessoa implements Serializable {
 	public String getUf() {
 		return uf;
 	}
-	
+
 	public void setUf(String uf) {
 		this.uf = uf;
 	}
