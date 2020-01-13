@@ -3,8 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
  	  xmlns:h="http://java.sun.com/jsf/html"
  	  xmlns:f="http://java.sun.com/jsf/core"
- 	 
- 	  xmlns:ui = "http://java.sun.com/jsf/facelets">
+ 	  xmlns:ui = "http://java.sun.com/jsf/facelets"
+ 	  xmlns:pt = "http://xmlns.jcp.org/jsf/passthrough">
 
 <h:head>
 
@@ -31,16 +31,16 @@
 			
 			<h:outputLabel value="Nome:" for="campoNome"/>
 			<h:inputText id="campoNome" value="#{pessoaBean.pessoa.nome}" 
-				required="true" requiredMessage="Informe o nome do usuário"
+				required="true" requiredMessage="Informe o nome do usuário" pt:placeholder="Informe o nome"
 				validatorMessage="Campo Nome: Min 10 e Max 50 caracteres">
 				<f:validateLength minimum="10" maximum="50"/>
 			</h:inputText>	
 			
 			<h:outputLabel value="Sobrenome:" for="campoSobrenome"/>
-			<h:inputText id="campoSobrenome" value="#{pessoaBean.pessoa.sobrenome}"/>
+			<h:inputText id="campoSobrenome" value="#{pessoaBean.pessoa.sobrenome}" pt:placeholder="Informe o sobrenome"/>
 			
 			<h:outputLabel value="Idade:" for="campoIdade"/>
-			<h:inputText id="campoIdade" value="#{pessoaBean.pessoa.idade}"/>
+			<h:inputText id="campoIdade" value="#{pessoaBean.pessoa.idade}" pt:placeholder="Informe a idade"/>
 			
 			<h:outputLabel value="Sexo"/>
 			<h:selectOneMenu id="campoSexo" value="#{pessoaBean.pessoa.sexo}" required="false">
@@ -50,7 +50,7 @@
 			</h:selectOneMenu>
 			
 			<h:outputLabel value="Nascimento:" for="campoNascimento"/>
-				<h:inputText id="campoNascimento" value="#{pessoaBean.pessoa.dataNascimento}" converterMessage="Data de nascimento inválida">
+				<h:inputText id="campoNascimento" value="#{pessoaBean.pessoa.dataNascimento}" pt:placeholder="Informe a data de nascimento" converterMessage="Data de nascimento inválida">
 				<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR" timeZone="GMT-03:00"/>
 			</h:inputText>
 			
@@ -65,7 +65,7 @@
 			
 			
 			<h:outputLabel value="CEP:"/>
-			<h:inputText value="#{pessoaBean.pessoa.cep}">
+			<h:inputText value="#{pessoaBean.pessoa.cep}" pt:placeholder="Informe o CEP">
 				<f:ajax event="blur" execute="@this" listener="#{pessoaBean.pesquisaCep}"
 				render="logradouro complemento bairro localidade uf unidade ibge gia"/> 
 			</h:inputText>
@@ -124,11 +124,18 @@
 				<f:selectItem itemValue="5" itemLabel="Cobol"/>
 			</h:selectManyCheckbox>
 			
+			<h:outputLabel value="Estados"/>
+			<h:selectOneMenu value="#{pessoaBean.pessoa.estados}" immediate="true">
+				<f:selectItem value="--[Selecione]--" noSelectionOption="true"/>
+				<f:selectItems value="#{pessoaBean.estados}"/>
+				<f:ajax event="change" execute="@this" listener="#{pessoaBean.carregaCidades}"/>
+			</h:selectOneMenu>
+			
 			<h:outputLabel value="Login:" for="campoLogin"/>
-			<h:inputText id="campoLogin" value="#{pessoaBean.pessoa.login}"/>
+			<h:inputText id="campoLogin" value="#{pessoaBean.pessoa.login}" pt:placeholder="Informe o login"/>
 			
 			<h:outputLabel value="Senha:" for="campoSenha"/>
-			<h:inputSecret id="campoSenha" value="#{pessoaBean.pessoa.senha}"/>
+			<h:inputSecret id="campoSenha" value="#{pessoaBean.pessoa.senha}" pt:placeholder="Informe a senha"/>
 			
 			<h:outputLabel/>
 			
