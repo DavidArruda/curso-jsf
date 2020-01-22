@@ -47,7 +47,7 @@ public class IDaoPessoaImpl implements IDaoPessoa {
 		List<Estados> listaEstados = entityManager.createQuery("from Estados").getResultList();
 		
 		for (Estados estado : listaEstados) {
-			selectItems.add(new SelectItem(estado.getId(), estado.getNome()));
+			selectItems.add(new SelectItem(estado, estado.getNome()));
 		}
 		
 		return selectItems;
