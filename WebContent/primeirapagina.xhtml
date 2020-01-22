@@ -17,7 +17,7 @@
 	
 	<ui:include src="/menu.xhtml"></ui:include>
 
-	<h:form id="form"  rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}">
+	<h:form id="form" enctype="multipart/form-data" rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}">
 		
 		<h:messages infoStyle="color:green;"/>
 	
@@ -28,6 +28,9 @@
 			</f:facet>
 			<h:outputLabel value="ID" for="campoId"/>
 			<h:inputText  id="campoId" value="#{pessoaBean.pessoa.id}" readonly="true"/>
+			
+			<h:outputLabel value="Foto"/>
+			<h:inputFile id="foto" value="#{pessoaBean.arquivoFoto}"></h:inputFile>
 			
 			<h:outputLabel value="Nome:" for="campoNome"/>
 			<h:inputText id="campoNome" value="#{pessoaBean.pessoa.nome}" 
@@ -125,10 +128,20 @@
 			</h:selectManyCheckbox>
 			
 			<h:outputLabel value="Estados"/>
-			<h:selectOneMenu value="#{pessoaBean.pessoa.estados}" immediate="true">
-				<f:selectItem value="--[Selecione]--" noSelectionOption="true"/>
+			<h:selectOneMenu value="#{pessoaBean.pessoa.estados}" immediate="true" id="comboEstados"
+				converter="estadoConverter">
+				<f:selectItem itemLabel="--[Selecione]--" noSelectionOption="true"/>
 				<f:selectItems value="#{pessoaBean.estados}"/>
-				<f:ajax event="change" execute="@this" listener="#{pessoaBean.carregaCidades}"/>
+				<f:ajax event="change" execute="@this" />
+				<f:ajax event="change" execute="@this" render="comboCidade" 
+				 listener="#{pessoaBean.carregaCidades}"/>
+			</h:selectOneMenu>
+			
+			<h:outputLabel value="Cidades"/>
+			<h:selectOneMenu value="#{pessoaBean.pessoa.cidades}" id="comboCidade" immediate="true"
+				converter="cidadeConverter">
+				<f:selectItem itemLabel="--[Selecione]--" noSelectionOption="true"/>
+				<f:selectItems value="#{pessoaBean.cidades}"/>
 			</h:selectOneMenu>
 			
 			<h:outputLabel value="Login:" for="campoLogin"/>
@@ -167,6 +180,14 @@
 			</h:column>
 			
 			<h:column>
+				<h:commandLink actionListener="#{pessoaBean.download}">
+				<f:facet name="header">Foto</f:facet>
+					<h:graphicImage width="60" height="60" value="#{p.fotoIconBase64}"></h:graphicImage>
+					<f:param name="fileDownloadId" value="#{p.id}"/>
+				</h:commandLink>
+			</h:column>
+			
+			<h:column>
 				<f:facet name="header">Sobrenome</f:facet>
 				<h:outputText value="#{p.sobrenome}"/>
 			</h:column>
@@ -188,7 +209,7 @@
 			
 			<h:column rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}">
 				<f:facet name="header">Ação</f:facet>
-				<h:commandLink title="Editar">
+				<h:commandLink title="Editar" action="#{pessoaBean.editar}"> 
 					<f:setPropertyActionListener value="#{p}" target="#{pessoaBean.pessoa}"/>
 					<h:graphicImage value="/resources/img/editar.png"/>
 				</h:commandLink>
