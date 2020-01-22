@@ -10,6 +10,7 @@ import br.com.jpautil.JPAUtil;
 
 public class IDaoLancamentoImpl implements IDaoLancamento {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Lancamento> consultar(Long codUser) {
 
