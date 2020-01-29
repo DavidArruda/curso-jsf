@@ -25,6 +25,7 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import javax.xml.bind.DatatypeConverter;
 
@@ -251,10 +252,21 @@ public class PessoaBean {
 		return "";
 	}
 	
-	public void download() {
+	public void download() throws IOException {
 		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		String fileDonwloadId = params.get("fileDownloadId");
-		System.out.println(fileDonwloadId); 
+		
+		Pessoa pessoa = daoGeneric.consultar(Pessoa.class, fileDonwloadId);
+		
+		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().
+										getExternalContext().getResponse();
+		response.addHeader("Content-Disposition", "attachment; filename=download." + pessoa.getExtensao());
+		response.setContentType("applicatin/octet-stream");
+		response.setContentLength(pessoa.getFotoIconBase64Original().length);
+		response.getOutputStream().write(pessoa.getFotoIconBase64Original());
+		response.getOutputStream().flush(); // confirmar resposta de dados
+		
+		FacesContext.getCurrentInstance().responseComplete();
 	}
 
 	public List<SelectItem> getCidades() {
