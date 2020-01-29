@@ -214,6 +214,7 @@ public class PessoaBean {
 
 		if (estado != null) {
 			pessoa.setEstados(estado);
+			@SuppressWarnings("unchecked")
 			List<Cidades> cidades = JPAUtil.getEntityManager()
 					.createQuery("from Cidades where estados.id = " + estado.getId()).getResultList();
 
@@ -235,6 +236,7 @@ public class PessoaBean {
 
 			if (estado != null) {
 				pessoa.setEstados(estado);
+				@SuppressWarnings("unchecked")
 				List<Cidades> cidades = JPAUtil.getEntityManager()
 						.createQuery("from Cidades where estados.id = " + estado.getId()).getResultList();
 
