@@ -51,38 +51,42 @@ public class PessoaBean {
 	private List<SelectItem> cidades;
 	private Part arquivoFoto;
 
-	public String salvar() throws IOException{
-		
-		byte[] imagemByte = getByte(arquivoFoto.getInputStream());
-		pessoa.setFotoIconBase64Original(imagemByte); /*Salva foto original*/
-		
-		/*Transformar em buffer image*/
-		BufferedImage bufferedImage  =  ImageIO.read(new ByteArrayInputStream(imagemByte));
-		
-		/*Pega o tipo da imagem*/
-		int type = bufferedImage.getType() == 0 ?  BufferedImage.TYPE_INT_ARGB : bufferedImage.getType();
-		
-		int altura = 200;
-		int largura = 200;
-		
-		/*Criar a miniatura*/
-		BufferedImage resizedImage = new BufferedImage(largura, altura, type);
-		Graphics2D g = resizedImage.createGraphics();
-		g.drawImage(bufferedImage, 0, 0, largura, altura, null);
-		g.dispose();
-		
-		/*Escrever a imagem em tamanho menor*/
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		String extensao = arquivoFoto.getContentType().split("\\/")[1];
-		ImageIO.write(resizedImage, extensao, baos);
-		
-		String miniImagem = "data:"+arquivoFoto.getContentType()+";base64,"+
-							DatatypeConverter.printBase64Binary(baos.toByteArray());
-		
-		/*Processar Imagem*/
-		pessoa.setFotoIconBase64(miniImagem);
-		pessoa.setExtensao(extensao);
-		
+	public String salvar() throws IOException {
+
+		if (arquivoFoto != null) {
+
+			byte[] imagemByte = getByte(arquivoFoto.getInputStream());
+			pessoa.setFotoIconBase64Original(imagemByte); /* Salva foto original */
+
+			/* Transformar em buffer image */
+			BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imagemByte));
+
+			/* Pega o tipo da imagem */
+			int type = bufferedImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : bufferedImage.getType();
+
+			int altura = 200;
+			int largura = 200;
+
+			/* Criar a miniatura */
+			BufferedImage resizedImage = new BufferedImage(largura, altura, type);
+			Graphics2D g = resizedImage.createGraphics();
+			g.drawImage(bufferedImage, 0, 0, largura, altura, null);
+			g.dispose();
+
+			/* Escrever a imagem em tamanho menor */
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			String extensao = arquivoFoto.getContentType().split("\\/")[1];
+			ImageIO.write(resizedImage, extensao, baos);
+
+			String miniImagem = "data:" + arquivoFoto.getContentType() + ";base64,"
+					+ DatatypeConverter.printBase64Binary(baos.toByteArray());
+
+			/* Processar Imagem */
+			pessoa.setFotoIconBase64(miniImagem);
+			pessoa.setExtensao(extensao);
+
+		}
+
 		pessoa = daoGeneric.merge(pessoa);
 
 		listarPessoas();
@@ -101,9 +105,8 @@ public class PessoaBean {
 		context.addMessage(null, message);
 	}
 
-	public String novo() {
+	public void novo() {
 		pessoa = new Pessoa();
-		return "";
 	}
 
 	public String limpar() {
@@ -253,21 +256,21 @@ public class PessoaBean {
 
 		return "";
 	}
-	
+
 	public void download() throws IOException {
 		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		String fileDonwloadId = params.get("fileDownloadId");
-		
+
 		Pessoa pessoa = daoGeneric.consultar(Pessoa.class, fileDonwloadId);
-		
-		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().
-										getExternalContext().getResponse();
+
+		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
+				.getResponse();
 		response.addHeader("Content-Disposition", "attachment; filename=download." + pessoa.getExtensao());
 		response.setContentType("applicatin/octet-stream");
 		response.setContentLength(pessoa.getFotoIconBase64Original().length);
 		response.getOutputStream().write(pessoa.getFotoIconBase64Original());
 		response.getOutputStream().flush(); // confirmar resposta de dados
-		
+
 		FacesContext.getCurrentInstance().responseComplete();
 	}
 
@@ -313,29 +316,29 @@ public class PessoaBean {
 		this.arquivoFoto = arquivoFoto;
 	}
 
-	/*Método para converter inputstream em um array de bytes*/
-	private byte[] getByte(InputStream is) throws IOException{
+	/* Método para converter inputstream em um array de bytes */
+	private byte[] getByte(InputStream is) throws IOException {
 
 		int len;
 		int size = 1024;
 		byte[] buf = null;
-		
-		if(is instanceof ByteArrayInputStream) {
-			size =is.available();
+
+		if (is instanceof ByteArrayInputStream) {
+			size = is.available();
 			buf = new byte[size];
-			len = is.read(buf,0,size);
-			
-		}else {
+			len = is.read(buf, 0, size);
+
+		} else {
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			buf = new byte[1024];
-			
-			while((len = is.read(buf, 0, size)) != -1) {
+
+			while ((len = is.read(buf, 0, size)) != -1) {
 				bos.write(buf, 0, len);
 			}
-			
+
 			buf = bos.toByteArray();
 		}
-		
+
 		return buf;
 	}
 
