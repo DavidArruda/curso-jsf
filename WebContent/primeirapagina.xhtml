@@ -157,8 +157,8 @@
 					<f:ajax execute="botaoNovo" render="@form"/>
 				</h:commandButton>
 					<h:commandButton value="Salvar" action="#{pessoaBean.salvar}" image="/resources/img/salvar.png"/>
-					<h:commandButton value="Remover" action="#{pessoaBean.delete}" rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}"/>	
-					<h:commandButton value="Limpar" action="#{pessoaBean.limpar}"/>		
+					<h:commandButton value="Remover" action="#{pessoaBean.delete}" rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}" immediate="true"/>	
+					<h:commandButton value="Limpar" action="#{pessoaBean.limpar}" immediate="true"/>		
 				</h:panelGroup>
 		</h:panelGrid>
 	</h:form>	
