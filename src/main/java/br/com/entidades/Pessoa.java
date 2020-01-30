@@ -15,6 +15,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
 
 @Entity
 public class Pessoa implements Serializable {
@@ -24,13 +31,26 @@ public class Pessoa implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
+	
+	@Size(min = 5, max = 50, message = "Nome Deve conter entre 5 a 50 caracteres")
 	private String nome;
-
+	
+	@NotEmpty(message = "Sobrenome deve ser informado")
+	@NotNull(message = "Sobrenome deve ser informado")
 	private String sobrenome;
-
+	
+	@DecimalMax(value = "80", message = "Idade Máxima 80")
+	@DecimalMin(value = "10", message = "Idade Miníma 10")
 	private Integer idade;
-
+	
+	/*
+	@CPF(message = "Informe um CPF válido")
+	private String cpf;
+	
+	@TituloEleitoral(message = "Informe um Titulo eleitoral válido")
+	private String tituloEleitor;
+	*/
+	
 	private String sexo;
 
 	private String nivelProgramador;
