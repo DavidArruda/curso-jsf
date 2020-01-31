@@ -1,16 +1,25 @@
 package br.com.dao;
 
+import java.io.Serializable;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 import br.com.jpautil.JPAUtil;
 
-public class DaoGeneric<E> {
+@Named
+public class DaoGeneric<E> implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+	@Inject
+	private EntityManager entityManager;
+	@Inject
+	private JPAUtil jpaUtil;
 
 	public void salvar(E entidade) {
-		EntityManager entityManager = JPAUtil.getEntityManager();
 
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
@@ -19,11 +28,9 @@ public class DaoGeneric<E> {
 
 		transaction.commit();
 
-		entityManager.close();
 	}
 
 	public E merge(E entidade) {
-		EntityManager entityManager = JPAUtil.getEntityManager();
 
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
@@ -32,13 +39,10 @@ public class DaoGeneric<E> {
 
 		transaction.commit();
 
-		entityManager.close();
-
 		return retorno;
 	}
 	
 	public void delete(E entidade) {
-		EntityManager entityManager = JPAUtil.getEntityManager();
 		
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
@@ -46,29 +50,21 @@ public class DaoGeneric<E> {
 		entityManager.remove(entidade);
 		
 		transaction.commit();
-		
-		entityManager.close();
 	}
 	
 	public void deletePorId(E entidade) {
-		EntityManager entityManager = JPAUtil.getEntityManager();
-		
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
 		
-		Object id = JPAUtil.getPrimaryKey(entidade);
+		Object id = jpaUtil.getPrimaryKey(entidade);
 		
 		entityManager.createQuery("delete from " + entidade.getClass().getName() + " where id = " + id).executeUpdate();
 		
 		transaction.commit();
-		
-		entityManager.close();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<E> listEntity(Class<E> entidade) {
-		EntityManager entityManager = JPAUtil.getEntityManager();
-		
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
 		
@@ -76,21 +72,16 @@ public class DaoGeneric<E> {
 		
 		transaction.commit();
 		
-		entityManager.close();
-		
 		return retorno;
 	}
 	
 	public E consultar(Class<E> entidade, String codigo) {
-		EntityManager entityManager = JPAUtil.getEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
-		
 		
 		E objeto = (E) entityManager.find(entidade, Long.parseLong(codigo));
 		
 		transaction.commit();
-		entityManager.close();
 		
 		return objeto;
 	}
